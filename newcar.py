@@ -37,7 +37,9 @@ why it is necessary and where it is being used in the rest of the program.
 
 
 class Car:
-    """1. This Function:"""
+    """1. This Function:
+    
+    Class constructor - sets up the car with its basic features"""
 
     def __init__(self):
         # Load Car Sprite and Rotate
@@ -66,7 +68,7 @@ class Car:
         self.time = 0  # Time Passed
 
     """ 2. This Function:
-    
+    draws the car on the screen using pygame. Blit is another term for a sprite.
     """
 
     def draw(self, screen):
@@ -74,7 +76,7 @@ class Car:
         self.draw_radar(screen)  # OPTIONAL FOR SENSORS
 
     """ 3. This Function:
-    
+    Radar checking for collisions
     """
 
     def draw_radar(self, screen):
@@ -331,7 +333,7 @@ def run_simulation(genomes, config):
 
 
 """ 1. This Section:
-    
+    Configs everything
 """
 if __name__ == "__main__":
     # Load Config
