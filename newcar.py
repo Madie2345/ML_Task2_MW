@@ -37,9 +37,11 @@ why it is necessary and where it is being used in the rest of the program.
 
 
 class Car:
-    """1. This Function:
+    """
+    1. This Function is a class constructor, setting up the car with its basic features.
+    The __init__ method starts a new instance of the car. The first 3 lines load the image of the car, scale it to the parameters that are set        earlier (CAR_SIZE_X and CAR_SIZE_Y, lines 21, 22) and rotate the sprite. The next 3 lines set the starting position of the car
     
-    Class constructor - sets up the car with its basic features"""
+    """
 
     def __init__(self):
         # Load Car Sprite and Rotate
