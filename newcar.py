@@ -39,8 +39,11 @@ why it is necessary and where it is being used in the rest of the program.
 class Car:
     """
     1. This Function is a class constructor, setting up the car with its basic features.
-    The __init__ method starts a new instance of the car. The first 3 lines load the image of the car, scale it to the parameters that are set        earlier (CAR_SIZE_X and CAR_SIZE_Y, lines 21, 22) and rotate the sprite. The next 3 lines set the starting position of the car
-    
+    The __init__ method starts a new instance of the car. The first 3 lines load the image of the car, scale it to the parameters that are set        
+    earlier (CAR_SIZE_X and CAR_SIZE_Y, lines 21, 22) and rotate the sprite. The next 3 lines set the starting position of the car in pixels on the screen. It 
+    should line up with where the start line is on the map. The self.speed_set variable flags whether or not the speed of the cars can change. It is set to false     so that the default speed for the cars can be changed later on, as they may choose to go faster to prioritise distance/time or slower to try and survive. The     center of the car is then calculated so that the radars can be attached to the center later on. It is found using the average of the position and the car         size, both X and Y. Then, the radars are introduced and drawn. The radars are used for the car to have a sense of the track and where the paths end. After        the car is set up, self.alive is set to true. This boolean variable checks if the car has crashed, once it has it is set to false and is no longer in the         game. It must be set back to true in order for the cars to reappear and retry. Finally, the distance driven and time passed are reset to 0, which is              important because the new generation of cars has not tested their abilities and their reward should not yet be there.
+
+    This function is necessary because without the car appearing in the simulation, nothing else would work, as the car one of the main features of the game,         along with the track. Multiple cars are created at the start of each generation for the best chance of some of them improving their performance, which is         tracked by the variables self.distance and self.time. 
     """
 
     def __init__(self):
@@ -69,8 +72,8 @@ class Car:
         self.distance = 0  # Distance Driven
         self.time = 0  # Time Passed
 
-    """ 2. This Function:
-    draws the car on the screen using pygame. Blit is another term for a sprite.
+    """ 
+    2. This Function draws the car on the screen using pygame. Blit is another term for a sprite. The previous function sets up the car, however never actually gets it to appear, which is what this one does. screen.blit is used to add self.rotated_sprite and self.position to the screen and then th 
     """
 
     def draw(self, screen):
