@@ -73,15 +73,16 @@ class Car:
         self.time = 0  # Time Passed
 
     """ 
-    2. This Function draws the car on the screen using pygame. Blit is another term for a sprite. The previous function sets up the car, however never actually gets it to appear, which is what this one does. screen.blit is used to add self.rotated_sprite and self.position to the screen and then th 
+    2. This Function draws the car on the screen using pygame. Blit is another term for a sprite. The previous function sets up the car, however never actually       gets it to appear, which is what this one does. screen.blit is used to add self.rotated_sprite and self.position to the screen and then the radars are            drawn to the screen using self.draw_radar(screen).
+
+    This function is necessary because for the simulation to appear and work, the cars have to be on the screen. The radars being seen is not as important,           however it is useful to see more of what might be going on with the cars. This function is used every time a new generation is needed, because in each            generation, new cars must appear.
     """
 
     def draw(self, screen):
         screen.blit(self.rotated_sprite, self.position)  # Draw Sprite
         self.draw_radar(screen)  # OPTIONAL FOR SENSORS
 
-    """ 3. This Function:
-    Radar checking for collisions
+    """ 3. This Function draws all of the radars that check for collisions. It has a for loop for the radars to be drawn in different positions. Their lines are drawn from the center of the car using the self.center variable which was calculated in function 1. The circles are drawn at the end fo the lined furthest from the car. The direction on the radars is based on their position, which is a
     """
 
     def draw_radar(self, screen):
