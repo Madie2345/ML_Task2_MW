@@ -1,4 +1,4 @@
-# This Code is Heavily Inspired By The YouTuber: Cheesy AI
+…# This Code is Heavily Inspired By The YouTuber: Cheesy AI
 # Code Changed, Optimized And Commented By: NeuralNine (Florian Dedov)
 # This code has again been hoisted by the CGS Digital Innovation Department
 # giving credit to the above authors for the benfit of our education in ML
@@ -39,11 +39,9 @@ why it is necessary and where it is being used in the rest of the program.
 class Car:
     """
     1. This Function is a class constructor, setting up the car with its basic features.
-    The __init__ method starts a new instance of the car. The first 3 lines load the image of the car, scale it to the parameters that are set        
-    earlier (CAR_SIZE_X and CAR_SIZE_Y, lines 21, 22) and rotate the sprite. The next 3 lines set the starting position of the car in pixels on the screen. It 
-    should line up with where the start line is on the map. The self.speed_set variable flags whether or not the speed of the cars can change. It is set to false     so that the default speed for the cars can be changed later on, as they may choose to go faster to prioritise distance/time or slower to try and survive. The     center of the car is then calculated so that the radars can be attached to the center later on. It is found using the average of the position and the car         size, both X and Y. Then, the radars are introduced and drawn. The radars are used for the car to have a sense of the track and where the paths end. After        the car is set up, self.alive is set to true. This boolean variable checks if the car has crashed, once it has it is set to false and is no longer in the         game. It must be set back to true in order for the cars to reappear and retry. Finally, the distance driven and time passed are reset to 0, which is              important because the new generation of cars has not tested their abilities and their reward should not yet be there.
+The __init__ method starts a new instance of the car. The first 3 lines load the image of the car, scale it to the parameters that are set earlier (CAR_SIZE_X and CAR_SIZE_Y, lines 21, 22) and rotate the sprite. The next 3 lines set the starting position of the car in pixels on the screen. It should line up with where the start line is on the map. The self.speed_set variable flags whether or not the speed of the cars can change. It is set to false so that the default speed for the cars can be changed later on, as they may choose to go faster to prioritise distance/time or slower to try and survive. The center of the car is then calculated so that the radars can be attached to the center later on. It is found using the average of the position and the car size, both X and Y. Then, the radars are introduced and drawn. The radars are used for the car to have a sense of the track and where the paths end. After the car is set up, self.alive is set to true. This boolean variable checks if the car has crashed, once it has it is set to false and is no longer in the game. It must be set back to true in order for the cars to reappear and retry. Finally, the distance driven and time passed are reset to 0, which is important because the new generation of cars has not tested their abilities and their reward should not yet be there.
 
-    This function is necessary because without the car appearing in the simulation, nothing else would work, as the car one of the main features of the game,         along with the track. Multiple cars are created at the start of each generation for the best chance of some of them improving their performance, which is         tracked by the variables self.distance and self.time. 
+This function is necessary because without the car appearing in the simulation, nothing else would work, as the car one of the main features of the game, along with the track. Multiple cars are created at the start of each generation for the best chance of some of them improving their performance, which is tracked by the variables self.distance and self.time. 
     """
 
     def __init__(self):
@@ -73,16 +71,18 @@ class Car:
         self.time = 0  # Time Passed
 
     """ 
-    2. This Function draws the car on the screen using pygame. Blit is another term for a sprite. The previous function sets up the car, however never actually       gets it to appear, which is what this one does. screen.blit is used to add self.rotated_sprite and self.position to the screen and then the radars are            drawn to the screen using self.draw_radar(screen).
+    2. This Function draws the car on the screen using pygame. Blit is another term for a sprite. The previous function sets up the car, however never actually gets it to appear, which is what this one does. screen.blit is used to add self.rotated_sprite and self.position to the screen and then the radars are drawn to the screen using self.draw_radar(screen).
 
-    This function is necessary because for the simulation to appear and work, the cars have to be on the screen. The radars being seen is not as important,           however it is useful to see more of what might be going on with the cars. This function is used every time a new generation is needed, because in each            generation, new cars must appear.
+This function is necessary because for the simulation to appear and work, the cars have to be on the screen. The radars being seen is not as important, however it is useful to see more of what might be going on with the cars. This function is used every time a new generation is needed, because in each generation, new cars must appear.
     """
 
     def draw(self, screen):
         screen.blit(self.rotated_sprite, self.position)  # Draw Sprite
         self.draw_radar(screen)  # OPTIONAL FOR SENSORS
 
-    """ 3. This Function draws all of the radars that check for collisions. It has a for loop for the radars to be drawn in different positions. Their lines are drawn from the center of the car using the self.center variable which was calculated in function 1. The circles are drawn at the end fo the lined furthest from the car. The direction on the radars is based on their position, which is a
+    """ 3. This Function draws all of the radars that check for collisions. It has a for loop for the radars to be drawn in different positions. Their lines are drawn from the center of the car using the self.center variable which was calculated in function 1. The circles are drawn at the end of the lines furthest from the car. The cars have 5 radars, one in front, one diagonally in front either way and one left and right of the car. These different positions are drawn using the loop, as each time the loop runs, a different radar is drawn. The direction it points is found in the 1st index of each object in the self.radars array.
+
+The radars being drawn isn't essential to the simulation, it just provides more details about what the code may be doing. New radars are drawn for each car when it is created.
     """
 
     def draw_radar(self, screen):
@@ -92,8 +92,10 @@ class Car:
             pygame.draw.line(screen, (0, 255, 0), self.center, position, 1)
             pygame.draw.circle(screen, (0, 255, 0), position, 5)
 
-    """ 4. This Function:
-    
+    """ 
+    4. This Function checks if a car has had a collision. It takes in the parameters self and game_map, and first sets self.alive to true because it cannot check if a car that has died has collided. It is forever checking if the car has crashed, so needs to make sure that self.alive stays true until then. The function loops through the coordinates of the pixels on the corners of the car, assuming that it is rectangular (only these are needed as it is near impossible for an edge to escape the track without at least one of the corners doing so). Assuming that the car is rectuangular is benefitial as it saves so many loops from being needed, simplifying the function, and is quite practical as the car is close enough in shape to assume that if the rectangle goes out, it will too. The if statement in this code is checking if any of the corners of the car's bounding box (represented by self.corners) touch a border on the game map. If it finds that any corner is touching a border (which is indicated by the color of the pixel at that corner's location being the same as BORDER_COLOR), it sets self.alive to false, rendering the car in question dead.
+
+This is one of the most essential functions for the simulation to actually happen, as the goal is to train the cars to drive around a track without colliding, and to do so, we need to know if a car has collided and remove it. It is used throughout the entire similulation, constantly checking if each individual car has crashed into the border of the track.
     """
 
     def check_collision(self, game_map):
@@ -105,7 +107,7 @@ class Car:
                 self.alive = False
                 break
 
-    """ 5. This Function:
+    """ 5. This Function creates an actual use for the radars that were drawn earlier.
     
     """
 
