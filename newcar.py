@@ -262,8 +262,34 @@ This function is necessary to accurately rotate an image around its center point
         return rotated_image
 
 
-""" This Function:
+""" This Function: (main use of NEAT algorithm)
+Empty Collections Initialization: Two lists, nets and cars, are initialized. nets will hold the neural networks corresponding to each genome, while cars will store instances of the Car class. These collections are essential for tracking and controlling the simulation's neural network-car interactions.
 
+Initializing PyGame and Display: The Pygame library is initialized, and a display window is created with the specified dimensions (WIDTH and HEIGHT). This step sets up the graphical environment for the simulation, enabling the rendering of game elements and user interactions.
+
+Creating Neural Networks and Cars: For each genome passed into the run_simulation function, a neural network is generated using the 'neat.nn.FeedForwardNetwork.create(g, config)' method. This network is associated with a specific genome and configuration. The neural network is added to the nets list, and the genome's fitness is initialized to zero. Additionally, a new instance of the Car class is created and added to the cars list. These cars will be controlled by their respective neural networks during the simulation.
+
+Clock and Font Settings: The code establishes a Pygame clock to regulate the frame rate of the simulation, ensuring that it runs at a consistent speed. Different fonts are loaded to display information on the screen, enhancing the user's understanding of the simulation's progress.
+
+Updating the Generation Counter: The current_generation global variable is incremented, reflecting the current generation being simulated. This provides a reference point for tracking the progress of the NEAT algorithm.
+
+Main Simulation Loop: The core of the simulation is a loop that runs indefinitely, managing the behavior of each car and updating their associated neural networks. This loop forms the backbone of the NEAT algorithm's execution.
+
+Event Handling: Within the loop, the code processes Pygame events. It checks for user interactions, such as closing the window or pressing the escape key, allowing users to control the simulation's execution.
+
+Car Actions and Neural Network Activation: For each car, the neural network is activated with the car's sensor data, obtained using nets[i].activate(car.get_data()). The highest value in the neural network's output determines the car's action, whether it should turn left, turn right, slow down, or speed up. This step enables the neural networks to influence the cars' movements.
+
+Updating Fitness and Car Movement: For cars that are still alive, their fitness scores are increased based on their progress, and their positions and movements are updated accordingly. This step is crucial for training the neural networks to improve car performance.
+
+Checking Car Survival: The code counts the number of cars that are still alive in the simulation. If no cars remain alive, indicating that the simulation has reached its termination condition, the simulation loop is exited.
+
+Time Limit for Simulation: A simple counter is used to roughly limit the duration of the simulation. In this case, the counter helps prevent the simulation from running indefinitely and ensures it ends after a predefined duration.
+
+Drawing the Game Environment: Within the loop, the code draws the game map onto the screen. Additionally, for each alive car, it renders the car's image on the screen, visualizing their movements and interactions with the environment.
+
+Displaying Information: The code displays textual information about the current generation, the number of cars still alive, and the mean fitness of the population. These details offer insights into the simulation's progress and the performance of evolving neural networks.
+
+Updating Display and Frame Rate: After drawing the game environment and information, the display is updated to reflect these changes. The frame rate is controlled using the Pygame clock, ensuring a maximum of 60 frames per second for smooth and consistent simulation playback.
 """
 
 
