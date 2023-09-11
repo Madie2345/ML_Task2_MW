@@ -262,7 +262,7 @@ This function is necessary to accurately rotate an image around its center point
         return rotated_image
 
 
-""" This Function: (main use of NEAT algorithm)
+""" This Function:
 Empty Collections Initialization: Two lists, nets and cars, are initialized. nets will hold the neural networks corresponding to each genome, while cars will store instances of the Car class. These collections are essential for tracking and controlling the simulation's neural network-car interactions.
 
 Initializing PyGame and Display: The Pygame library is initialized, and a display window is created with the specified dimensions (WIDTH and HEIGHT). This step sets up the graphical environment for the simulation, enabling the rendering of game elements and user interactions.
@@ -382,7 +382,23 @@ def run_simulation(genomes, config):
         clock.tick(60)  # 60 FPS
 
 
-""" 1. This Section: The program main section
+""" This Section: entry point for the script, ensuring that the contained code executes only when the script is run directly, not when it's imported as a module.
+
+The configuration settings defined in the config.txt file are loaded into the config variable using neat.Config(). The various components include neat.DefaultGenome, which specifies options controlling genome characteristics such as node activation, bias, connection management, and architecture. Additionally, parameters like num_hidden, num_inputs, and num_outputs collectively define the neural network's structure.
+
+neat.DefaultReproduction defines settings related to genome reproduction, including the number of elite genomes (elitism) directly passed to the next generation and the survival_threshold that determines which genomes are considered for reproduction.
+
+neat.DefaultSpeciesSet sets the compatibility threshold (compatibility_threshold) used to distinguish species, while neat.DefaultStagnation defines parameters such as the species fitness function (species_fitness_func), maximum stagnation generations (max_stagnation), and species elitism (species_elitism).
+
+By encapsulating these configurations within the config variable, this section establishes the foundation for the NEAT algorithm's behavior and species management, necessary for guiding the evolution of neural networks controlling the simulated cars.
+
+In the other part of this section, 'neat.StdOutReporter(True)' is added to allow real-time updates to be printed to the console. This report provides information on the status of each generation as they are simulated.
+
+Additionally, a neat.StatisticsReporter() is added to collect various evolution statistics. This reporter helps monitor and record data such as the mean fitness of the population and other relevant metrics throughout the simulation.
+
+Finally, the population.run(run_simulation, 1000) statement initiates the NEAT algorithm to run the simulation for a maximum of 1000 generations. During this process, the population of neural networks evolves, and the provided run_simulation function controls the behavior of the simulated cars.
+
+This section is essential as it serves as the main driver for running the NEAT algorithm and simulating the evolution of neural networks controlling the cars.
     
 """
 if __name__ == "__main__":
