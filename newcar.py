@@ -107,7 +107,10 @@ This is one of the most essential functions for the simulation to actually happe
                 self.alive = False
                 break
 
-    """ 5. This Function creates an actual use for the radars that were drawn earlier.
+    """ 
+5. This Function creates an actual use for the radars that were drawn earlier. The x and y variables calculate the radars location based on the cars current angle and center, using trigonometry. The while loop is the primary part of this function, using the radars to continuously scan until one of two conditions are meant: radar hits a border colour (indicating that it has detected an obstacle/ boundary) or the length exceeds 300 units (so the radar doesn't scan indefinetely). Within the loop, length is increased by one each iteration, and the x and y values of the radar are updated so that the radar moves further from the car until the border is detected, or the length limit is reached. The final part of this function involves calculating the distance from the center of the car to the point where a radar can scan a border/ meet the length limit using the Euclidean formula. This is then appended to the self.radars list.
+
+This function is necessary because it creates more of a use for the radars, which allow the car to sense obstacles. Later on, these calculations to sense obstacles are used to allow the cars to learn to steer away from them and improve their overall fitness.
     
     """
 
@@ -140,7 +143,9 @@ This is one of the most essential functions for the simulation to actually happe
         )
         self.radars.append([(x, y), dist])
 
-    """ 6. This Function:
+    """ 6. This Function sets the original speed for the first generation of the cars and updates the cars speed, position, rotation and collision detection throughout the simulation. This function starts by setting the car's speed to 20, but only if it hasn't been set before (initial speed). Then, the sprite (blit) image is rotated and the x position of the car is updated using trigonometric functions sin and cos to move it in the direction of the specified angle. Due to limits max and min of the position, the cars x position is limited within the game map. Distance and time is increased, which is important as it is the reward system for the car. The same occurs for the y position of the car. A new center of the car is calculated by averaging the x and y values of the car. The 4 corners of the cars hit-box are recalculated based on the updated position. The check collision function is called to check if the car has crashed during it's movements and the stored data in the radars list is cleared, allowing for the process to repeat. The last part of the function loops through degrees in steps of 45 degrees, each time calling the check_radar function to perform a scan in that direction.
+
+This function is essential because it allows the simulation to run continuously, moving the car on the screen and updating its position so that the radars can scan for new objects, and so that the check_collision function can use the cars cooridinates to check for collisions.
     
     """
 
@@ -340,8 +345,8 @@ def run_simulation(genomes, config):
         clock.tick(60)  # 60 FPS
 
 
-""" 1. This Section:
-    Configs everything
+""" 1. This Section: The program main section
+    
 """
 if __name__ == "__main__":
     # Load Config
