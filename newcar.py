@@ -96,7 +96,7 @@ The radars being drawn isn't essential to the simulation, it just provides more 
     """ 
 4. This Function checks if a car has had a collision. It takes in the parameters self and game_map, and first sets self.alive to true because it cannot check if a car that has died has collided. It is forever checking if the car has crashed, so needs to make sure that self.alive stays true until then. The function loops through the coordinates of the pixels on the corners of the car, assuming that it is rectangular (only these are needed as it is near impossible for an edge to escape the track without at least one of the corners doing so). Assuming that the car is rectuangular is benefitial as it saves so many loops from being needed, simplifying the function, and is quite practical as the car is close enough in shape to assume that if the rectangle goes out, it will too. The if statement in this code is checking if any of the corners of the car's bounding box (represented by self.corners) touch a border on the game map. If it finds that any corner is touching a border (which is indicated by the color of the pixel at that corner's location being the same as BORDER_COLOR), it sets self.alive to false, rendering the car in question dead.
 
-This is one of the most essential functions for the simulation to actually happen, as the goal is to train the cars to drive around a track without colliding, and to do so, we need to know if a car has collided and remove it. It is used throughout the entire similulation, constantly checking if each individual car has crashed into the border of the track.
+This is one of the most essential functions for the simulation to actually happen, as the goal is to train the cars to drive around a track without colliding, and to do so, we need to know if a car has collided and remove it. It is called in the run_simulation function and used throughout the entire similulation, constantly checking if each individual car has crashed into the border of the track.
     """
 
     def check_collision(self, game_map):
@@ -147,7 +147,7 @@ This function is necessary because it creates more of a use for the radars, whic
     """
 6. This Function sets the original speed for the first generation of the cars and updates the cars speed, position, rotation and collision detection throughout the simulation. This function starts by setting the car's speed to 20, but only if it hasn't been set before (initial speed). Then, the sprite (blit) image is rotated and the x position of the car is updated using trigonometric functions sin and cos to move it in the direction of the specified angle. Due to limits max and min of the position, the cars x position is limited within the game map. Distance and time is increased, which is important as it is the reward system for the car. The same occurs for the y position of the car. A new center of the car is calculated by averaging the x and y values of the car. The 4 corners of the cars hit-box are recalculated based on the updated position. The check collision function is called to check if the car has crashed during it's movements and the stored data in the radars list is cleared, allowing for the process to repeat. The last part of the function loops through degrees in steps of 45 degrees, each time calling the check_radar function to perform a scan in that direction.
 
-This function is essential because it allows the simulation to run continuously, moving the car on the screen and updating its position so that the radars can scan for new objects, and so that the check_collision function can use the cars cooridinates to check for collisions.
+This function is essential because it allows the simulation to run continuously, moving the car on the screen and updating its position so that the radars can scan for new objects, and so that the check_collision function can use the cars cooridinates to check for collisions. It is called in the run_simulation function to allow the cars to continuously update.
     
     """
 
@@ -212,7 +212,7 @@ This function is essential because it allows the simulation to run continuously,
     """ 
 7. This Function formats the data from the radars to be used in the machine learning algorithm. It first assigns the radar data from the cars to the radars variable, and sets up return values. It next loops through the radar data. Enumerate means that it will go through each radar reading. It takes the distance that each radar has scanned and saves it to its corresponding index in the return_values variable. This variable is then returned.
 
-This is a necessary function because it allows the data from the radars to be later used for the cars. Without it, the data would not be preprocessed and the algorithm may not be able to read the data, meaning that the simulation would not work.
+This is a necessary function because it allows the data from the radars to be later used for the cars. Without it, the data would not be preprocessed and the algorithm may not be able to read the data, meaning that the simulation would not work. It is called in the run_simulation function when the cars need to decide on a behaviour to change for the next generation.
     """
 
     def get_data(self):
@@ -225,7 +225,7 @@ This is a necessary function because it allows the data from the radars to be la
         return return_values
 
     """ 
-8. This Function returns a boolean value. It takes in a parameter of self and returns self.alive, which is also used in the check_collision function; if a collision is detected self.alive is set to false. This function is important because it confirms if the car is alive with a basic function.
+8. This Function returns a boolean value. It takes in a parameter of self and returns self.alive, which is also used in the check_collision function; if a collision is detected self.alive is set to false. This function is important because it confirms if the car is alive with a basic function. It is used in the run_simulation function to continuously check the status of the cars.
     
     """
 
@@ -236,7 +236,7 @@ This is a necessary function because it allows the data from the radars to be la
     """ 
 9. This Function calculates the reward for the cars based on distance the car has travelled. The reward value is standardised by dividing the distance travelled by half of the cars width, meaning that the cars progress is relative to its size.
 
-This function is essential because the NEAT algorithm relies on a reward factor so that the alorithm can determine which mutations are benefitial. In this case, a higher value for distance is more desirable, so later on, this reward will be used to determine which behaviours can lead to a ligher distance.
+This function is called in the run_simulation function and is essential because the NEAT algorithm relies on a reward factor so that the alorithm can determine which mutations are benefitial. In this case, a higher value for distance is more desirable, so later on, this reward will be used to determine which behaviours can lead to a ligher distance.
     
     """
 
@@ -246,7 +246,7 @@ This function is essential because the NEAT algorithm relies on a reward factor 
         return self.distance / (CAR_SIZE_X / 2)
 
     """
-10. This Function is used within function 6 and first obtains the bounding box of the input image using image.get_rect() and storing it in a variable called rectangle. Following that, the function  generates a rotated version of the image using Pygame's transformation capabilities, with the rotation angle specified by the angle parameter. This rotated image is saved in the rotated_image variable. The function then duplicates the original image's rectangle to create rotated_rectangle. The next step ensures that the center of rotated_rectangle aligns precisely with the center of the newly rotated image's rectangle. Lastly, the function extracts a cropped section from the rotated image, corresponding in size and position to the original image's rectangle with a centered alignment. This cropped image is then assigned to rotated_image and returned as the function's output.
+10. This Function is first used within function 6 and first obtains the bounding box of the input image using image.get_rect() and storing it in a variable called rectangle. Following that, the function  generates a rotated version of the image using Pygame's transformation capabilities, with the rotation angle specified by the angle parameter. This rotated image is saved in the rotated_image variable. The function then duplicates the original image's rectangle to create rotated_rectangle. The next step ensures that the center of rotated_rectangle aligns precisely with the center of the newly rotated image's rectangle. Lastly, the function extracts a cropped section from the rotated image, corresponding in size and position to the original image's rectangle with a centered alignment. This cropped image is then assigned to rotated_image and returned as the function's output.
 
 This function is necessary to accurately rotate an image around its center point (whilst ensuring that the dimensions of the cars remain the same), which is essential for the cars when turning.
     
@@ -290,6 +290,8 @@ Drawing the Game Environment: Within the loop, the code draws the game map onto 
 Displaying Information: The code displays textual information about the current generation, the number of cars still alive, and the mean fitness of the population. These details offer insights into the simulation's progress and the performance of evolving neural networks.
 
 Updating Display and Frame Rate: After drawing the game environment and information, the display is updated to reflect these changes. The frame rate is controlled using the Pygame clock, ensuring a maximum of 60 frames per second for smooth and consistent simulation playback.
+
+This function is very important because it is what makes the simulation run. It calls functions identified in the 'Car' class and puts everything together to run at the correct times to allow the simulation to occur. This function is called by the 'Main' section below it and once called, it runs until the simulation is stopped by the kill command (Ctrl+Alt+F5) or reaches the maximum number of generations (1000).
 """
 
 
@@ -398,7 +400,7 @@ Additionally, a neat.StatisticsReporter() is added to collect various evolution 
 
 Finally, the population.run(run_simulation, 1000) statement initiates the NEAT algorithm to run the simulation for a maximum of 1000 generations. During this process, the population of neural networks evolves, and the provided run_simulation function controls the behavior of the simulated cars.
 
-This section is essential as it serves as the main driver for running the NEAT algorithm and simulating the evolution of neural networks controlling the cars.
+This section is essential as it serves as the main driver for running the NEAT algorithm and simulating the evolution of neural networks controlling the cars. It is used when the program first runs to set up the simulation, and then calls the run_simulation function which carries it out.
     
 """
 if __name__ == "__main__":
