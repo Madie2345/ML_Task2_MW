@@ -33,6 +33,8 @@ triple quotes(block quotes) """ """.
 Your comments should describe each function and what it is doing, 
 why it is necessary and where it is being used in the rest of the program.
 
+I wrote the comments with line wrap on, so it may need to be on to easily be able
+to read the full comments.
 """
 
 
